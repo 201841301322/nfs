@@ -1,4 +1,5 @@
 sudo dpkg-reconfigure dash
+sudo apt-get install zlib1g-dev -y
 sudo apt-get install gcc -y
 sudo apt-get install g++ -y
 sudo apt-get install aptitude -y
