@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.26.2
-# Tue Sep 12 14:30:58 2017
+# Tue Sep 12 14:33:33 2017
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -48,8 +48,8 @@ CONFIG_FEATURE_HAVE_RPC=y
 CONFIG_LFS=y
 CONFIG_CROSS_COMPILER_PREFIX="arm-hisiv510-linux-"
 CONFIG_SYSROOT=""
-CONFIG_EXTRA_CFLAGS="-mcpu=cortex-a7 -mfloat-abi=softfp -mfpu=neon-vfpv4 -fno-aggressive-loop-optimizations"
-CONFIG_EXTRA_LDFLAGS=""
+CONFIG_EXTRA_CFLAGS="-mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4"
+CONFIG_EXTRA_LDFLAGS="-mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4"
 CONFIG_EXTRA_LDLIBS=""
 
 #

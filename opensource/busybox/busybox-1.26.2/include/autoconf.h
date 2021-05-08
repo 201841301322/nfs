@@ -2,7 +2,7 @@
  * Automatically generated C config: don't edit
  * Busybox version: 1.26.2
  */
-#define AUTOCONF_TIMESTAMP "2021-05-08 00:53:17 CST"
+#define AUTOCONF_TIMESTAMP "2021-05-09 02:27:45 CST"
 
 #define CONFIG_HAVE_DOT_CONFIG 1
 #define ENABLE_HAVE_DOT_CONFIG 1
@@ -252,7 +252,7 @@
 # define IF_SYSROOT(...) __VA_ARGS__
 #endif
 #define IF_NOT_SYSROOT(...)
-#define CONFIG_EXTRA_CFLAGS "-mcpu=cortex-a7 -mfloat-abi=softfp -mfpu=neon-vfpv4 -fno-aggressive-loop-optimizations"
+#define CONFIG_EXTRA_CFLAGS "-mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4"
 #define ENABLE_EXTRA_CFLAGS 1
 #ifdef MAKE_SUID
 # define IF_EXTRA_CFLAGS(...) __VA_ARGS__ "CONFIG_EXTRA_CFLAGS"
@@ -260,7 +260,7 @@
 # define IF_EXTRA_CFLAGS(...) __VA_ARGS__
 #endif
 #define IF_NOT_EXTRA_CFLAGS(...)
-#define CONFIG_EXTRA_LDFLAGS ""
+#define CONFIG_EXTRA_LDFLAGS "-mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4"
 #define ENABLE_EXTRA_LDFLAGS 1
 #ifdef MAKE_SUID
 # define IF_EXTRA_LDFLAGS(...) __VA_ARGS__ "CONFIG_EXTRA_LDFLAGS"
