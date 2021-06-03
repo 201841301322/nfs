@@ -11,14 +11,20 @@
 
 
 #define PIC_SUM 7
+#define GEC6818_LED_ON		_IOW('L',  1, unsigned long)
+#define GEC6818_LED_OFF		_IOW('L',  2, unsigned long)
+
 int pic_num=0;
 int paly_flag=0;
+int led_fd=-1;
 static char color_buf[800*480*4]={0};
 static char bmp_buf[800*480*3]={0};
 int play_pic(int p_num);
 int pic_next();
 int pic_back();
 int K4,K3,K2,K6;
+int led7_flag,led8_flag,led9_flag,led10_flag;
+
 static int getResultFromSystemCall(const char *pCmd,char *pResult,int size);
 int get_sta()
 {
@@ -329,15 +335,41 @@ void *get_butten()
     //         printf("K4");
     //     }
 	// }
+		int K4_fd,K3_fd,K2_fd,K6_fd;
+		int K[7];
+		
 	while(1)
 	{
-		
-		//system("cat /sys/class/gpio/gpio63/value > K4.txt");
-		//system("cat /sys/class/gpio/gpio62/value > K3.txt");
-		//system("cat /sys/class/gpio/gpio28/value > K2.txt");
+		system("cat /sys/class/gpio/gpio63/value > K4.txt");
+		usleep(1000);
+		system("cat /sys/class/gpio/gpio62/value > K3.txt");
+		usleep(1000);
+		system("cat /sys/class/gpio/gpio28/value > K2.txt");
+		usleep(1000);
 		system("cat /sys/class/gpio/gpio41/value > K6.txt");
-		system("echo K6=");
-		system("cat K6.txt");
+		usleep(1000);
+		K4_fd=open("K4.txt",O_RDONLY);
+		K3_fd=open("K3.txt",O_RDONLY);
+		K2_fd=open("K2.txt",O_RDONLY);
+		K6_fd=open("K6.txt",O_RDONLY);
+		read(K4_fd,&K[4],1);
+		read(K3_fd,&K[3],1);
+		read(K2_fd,&K[2],1);
+		read(K6_fd,&K[6],1);
+		//printf("K4=%c\r\n",K[4]);
+		close(K4_fd);
+		close(K3_fd);
+		close(K2_fd);
+		close(K6_fd);
+		K4=K[4]-'0';
+		K3=K[3]-'0';
+		K2=K[2]-'0';
+		K6=K[6]-'0';
+		
+		//system("echo star:K6=");
+		//system("cat K6.txt");
+		//system("echo end");
+
 		// if(K4==1)
 		// {
 		// 	usleep(1000);
@@ -365,10 +397,54 @@ void *get_butten()
 		// {
 		// 	printf("K6");
 		// }
-		 usleep(5000);
+		 usleep(10000);
 	}
 }
 
+void *butten_turn()
+{
+	led7_flag=led8_flag=led9_flag=led10_flag=0;
+	while(1)
+	{
+		if(K4==0)
+			{
+				pic_back();
+				//printf("K4=%c\r\n",K4);
+				if(led7_flag==0)
+				{ioctl(led_fd,GEC6818_LED_ON,7);led7_flag=1;}
+				else
+				{ioctl(led_fd,GEC6818_LED_OFF,7);led7_flag=0;}
+				while(!K4);	
+			}
+		if(K3==0)
+			{
+				pic_next();
+				if(led8_flag==0)
+				{ioctl(led_fd,GEC6818_LED_ON,8);led8_flag=1;}
+				else
+				{ioctl(led_fd,GEC6818_LED_OFF,8);led8_flag=0;}
+				while(!K3);	
+			}
+		if(K2==0)
+			{
+				paly_flag=1;
+				if(led9_flag==0)
+				{ioctl(led_fd,GEC6818_LED_ON,9);led9_flag=1;}
+				else
+				{ioctl(led_fd,GEC6818_LED_OFF,9);led9_flag=0;}
+				while(!K2);	
+			}
+		if(K6==0)
+			{
+				paly_flag=0;
+				if(led10_flag==0)
+				{ioctl(led_fd,GEC6818_LED_ON,10);led10_flag=1;}
+				else
+				{ioctl(led_fd,GEC6818_LED_OFF,10);led10_flag=0;}
+				while(!K6);	
+			}
+	}		
+}
 static int getResultFromSystemCall(const char *pCmd,char *pResult,int size)
 {
  int fd[2];
@@ -391,7 +467,7 @@ int main(int argc, char **argv)
 {  
 	pthread_t tid_photo;
 	pthread_t tid_get_butten;
-
+	pthread_t tid_butten_turn;
     
 
 
@@ -399,17 +475,20 @@ int main(int argc, char **argv)
 	system("echo 62 > /sys/class/gpio/export");//k3
 	system("echo 28 > /sys/class/gpio/export");//K2
 	system("echo 41 > /sys/class/gpio/export");//k6
+	system("rmmod led_drv > /dev/null");//led.ko
+	system("insmod led.ko > /dev/null");//led.ko
 	
-	
+	led_fd = open("/dev/gec6818_leds",O_RDWR);
 
 	pthread_create(&tid_photo,NULL,pic_auto_play,NULL);
 	pthread_create(&tid_get_butten,NULL,get_butten,NULL);
+	pthread_create(&tid_butten_turn,NULL,butten_turn,NULL);
 	
 		pic_next();
 		sleep(2);
 		get_sta();
 	
-
+	while(1);
 	//返回0是正确，没有错误，也就是的正确的返回
 	return 0;  
 }
