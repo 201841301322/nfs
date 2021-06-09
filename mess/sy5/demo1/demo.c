@@ -576,7 +576,7 @@ void *pic_auto_play(void *arg)
 		if(paly_flag==1)
 		{
 			pic_next();
-			sleep(2);
+			sleep(1);
 			
 			usleep(100);
 		}
