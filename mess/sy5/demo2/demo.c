@@ -14,6 +14,25 @@
 #define GEC6818_LED_ON		_IOW('L',  1, unsigned long)
 #define GEC6818_LED_OFF		_IOW('L',  2, unsigned long)
 
+#define LHF \
+	pthread_t tid_photo;\
+	pthread_t tid_get_butten;\
+	pthread_t tid_butten_turn;\
+	pthread_t tid_time_out_end;\
+	pthread_t tid_play_mp3;\
+	pthread_create(&tid_time_out_end,NULL,time_out_end,NULL);\
+	load_all_pic();\
+	system("echo 63 > /sys/class/gpio/export");\
+	system("echo 62 > /sys/class/gpio/export");\
+	system("echo 28 > /sys/class/gpio/export");\
+	system("echo 41 > /sys/class/gpio/export");\
+	pthread_create(&tid_photo,NULL,pic_auto_play,NULL);\
+	pthread_create(&tid_get_butten,NULL,get_butten,NULL);\
+	pthread_create(&tid_butten_turn,NULL,butten_turn,NULL);\
+	pthread_create(&tid_play_mp3,NULL,play_mp3,NULL);\
+    play_fm();\
+	get_sta();\
+
 long int x_buf=0,y_buf=0,nexty_buf=0,nextx_buf=0;
 long int star_x=0,star_y=0,end_x=0;
 long int pic_x=0,pic_y=0,pic_x2=0,pic_y2=0;
@@ -819,18 +838,6 @@ void *time_out_end()
 	exit(0);
 }
 
-void *err_exit()
-{
-	int KK4i=0;
-	for(KK4i;KK4i<2;KK4i++)
-		{sleep(1);printf("laozihaizai");}
-	while(1)
-	{
-		if(K4==0&&K3==0&&K2==0&&K6==0)
-		{exit(0);}
-	}
-}
-
 void *play_mp3()
 {
 	system("madplay 111.mp3 -r");//k6
@@ -840,47 +847,7 @@ void *play_mp3()
 
 int main(int argc, char **argv)
 {  
-	pthread_t tid_photo;
-	pthread_t tid_get_butten;
-	pthread_t tid_butten_turn;
-	pthread_t tid_time_out_end;
-	pthread_t tid_play_mp3;
-	pthread_t tid_err_exit;
-
-	pthread_create(&tid_time_out_end,NULL,time_out_end,NULL);
-
-	//sleep(5);
-	//pthread_t tid_pic_slip;
-	load_all_pic();
-
-	system("echo 63 > /sys/class/gpio/export");//k4
-	system("echo 62 > /sys/class/gpio/export");//k3
-	system("echo 28 > /sys/class/gpio/export");//K2
-	system("echo 41 > /sys/class/gpio/export");//k6
-	//system("rmmod led_drv > /dev/null");//led.ko
-	//system("insmod led.ko > /dev/null");//led.ko
-	
-	//led_fd = open("/dev/gec6818_leds",O_RDWR);
-	pthread_create(&tid_photo,NULL,pic_auto_play,NULL);
-	pthread_create(&tid_get_butten,NULL,get_butten,NULL);
-	pthread_create(&tid_butten_turn,NULL,butten_turn,NULL);
-	pthread_create(&tid_play_mp3,NULL,play_mp3,NULL);
-	pthread_create(&tid_err_exit,NULL,err_exit,NULL);
-	//pthread_create(&tid_pic_slip,NULL,pic_slip,NULL);
-	
-		//pic_next();
-		//sleep(2);
-    play_fm();
-	
-
-	get_sta();
-
-	
-	//pic_y=0;
-	//y_buf=0;
-	//pic_slip();
-	//K4=1;
+	LHF
 	while(1);
-	//返回0是正确，没有错误，也就是的正确的返回
 	return 0;  
 }
