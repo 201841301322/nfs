@@ -1,2 +1,0 @@
-#!/bin/sh
-PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-/home/geclab/buildroot-2016.11/output/host/usr/arm-none-linux-gnueabi/sysroot/usr/lib/pkgconfig:/home/geclab/buildroot-2016.11/output/host/usr/arm-none-linux-gnueabi/sysroot/usr/share/pkgconfig} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-/home/geclab/buildroot-2016.11/output/host/usr/arm-none-linux-gnueabi/sysroot} $(dirname $0)/pkgconf  $@

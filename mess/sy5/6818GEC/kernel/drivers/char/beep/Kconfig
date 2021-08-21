@@ -1,6 +1,0 @@
-config X6818_BEEP_DRIVER
-	bool "X6818 beep driver"
-	default y
-	help
-	compile for leddriver,y for kernel,m for module.
-
