@@ -41,63 +41,36 @@ int get_sta()
 		{
 			if(buf.code == ABS_X)
 			{
-				x = buf.value* 800/1024;
-				printf("x_buf=%d\n",x);
+				x = buf.value* 1.121*800/1024;
+				printf("x=%d\n",x);
 				
 			}
 			if(buf.code == ABS_Y)
 			{
-				y = buf.value* 480/600;
-			}
-			if(buf.type == EV_KEY && buf.code == BTN_TOUCH )
-			{
-			//松开
-			if(buf.value == 0)
-			{
-				end_x=x;
-				printf("end_x=%d\n",end_x);
-
-				printf("release!\n");
-				
-				}       
-
-				
-				
-			}
-			//按下
-			else
-			{	
-				
-				star_x=x;
-				star_y=y;
-				
-
-				printf("x=%d\n",x);
+				y = buf.value* 1.121*480/600;
 				printf("y=%d\n",y);
-				printf("down!\n");
-				
-				
 			}
+			
 		}
 
 
-			if(buf.code == ABS_X)
-			{
-				x = buf.value* 800/1024;
-				printf("x=%d\n",x);
-			}
+		if(buf.code == ABS_X)
+		{
+			x = buf.value* 800/1024;
+			//printf("x=%d\n",x);
+		}
 			
-			if(buf.code == ABS_Y)
-			{
+		if(buf.code == ABS_Y)
+		{
 				
-				y = buf.value* 480/600;
-				//printf("y=%d\n",y);
+			y = buf.value* 480/600;
+			//printf("y=%d\n",y);
 				
 				
-			} 
+		} 
 			
 
-		}
+		
 		
 		
 		
@@ -140,8 +113,10 @@ int main(int argc, char **argv)
 {  
 	int r,g,b;
 	r=0;g=0;b=0;
+	get_sta();
 	while(1)
 	{
+		
 		r=rand()%254;
 		g=rand()%254;
 		b=rand()%254;
