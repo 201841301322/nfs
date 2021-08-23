@@ -50,12 +50,12 @@ int main(int argc, char **argv)
 	r=0;g=0;b=0;
 	while(1)
 	{
-		r==254?g++:r++;
-		g==254?b++:g++;
-		b==254?r=0,g=0,b=0:b++;
+		r=rand()%254;
+		g=rand()%254;
+		b=rand()%254;
 		play(r,g,b);
 		
-		usleep(100000);
+		usleep(500000);
 	}
 	play(b,g,r);
 	usleep(100);
